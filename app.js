@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadData() {
     try {
         const [resultsResponse, lapsResponse] = await Promise.all([
-            fetch('/data/results.json'),
-            fetch('/data/laps.json')
+            fetch('./data/results.json'),
+            fetch('./data/laps.json')
         ]);
 
         resultsData = await resultsResponse.json();
