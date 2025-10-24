@@ -1,0 +1,172 @@
+/* Custom styles for Backyard Ultra 2025 Data Visualization */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* Header styling */
+.container-fluid.bg-dark {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Table styling */
+#resultsTable {
+    font-size: 0.85rem;
+}
+
+#resultsTable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 20px;
+}
+
+.sortable:hover {
+    background-color: #e9ecef;
+}
+
+.sortable::after {
+    content: '↕';
+    position: absolute;
+    right: 5px;
+    opacity: 0.3;
+}
+
+.runner-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.runner-row:hover {
+    background-color: #f0f0f0 !important;
+}
+
+.runner-row.table-active {
+    background-color: #d1ecf1 !important;
+    font-weight: 500;
+}
+
+/* Chart container */
+.chart-container {
+    position: relative;
+    height: 70vh;
+    width: 100%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Selected runners badges */
+#selectedRunners {
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#selectedRunners .badge {
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin-right: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .col-md-2 {
+        margin-bottom: 20px;
+    }
+
+    #resultsTable {
+        font-size: 0.75rem;
+    }
+
+    .chart-container {
+        height: 50vh;
+    }
+}
+
+/* Scrollbar styling for table */
+.table-responsive::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Day/Night background accent placeholders */
+.day-accent {
+    background-color: rgba(255, 223, 0, 0.1);
+}
+
+.night-accent {
+    background-color: rgba(0, 0, 139, 0.1);
+}
+
+/* Split panel layout */
+.split-container {
+    display: flex;
+    height: calc(100vh - 100px);
+    position: relative;
+}
+
+.split-panel {
+    overflow: auto;
+    position: relative;
+}
+
+#leftPanel {
+    width: 20%;
+    min-width: 200px;
+}
+
+#rightPanel {
+    flex: 1;
+    padding-left: 10px;
+}
+
+/* Divider for resizing */
+.divider {
+    width: 5px;
+    cursor: col-resize;
+    background-color: #dee2e6;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.divider:hover {
+    background-color: #6c757d;
+}
+
+.divider::before {
+    content: '⋮';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #6c757d;
+    font-size: 20px;
+    line-height: 1;
+}
