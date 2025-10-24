@@ -21,12 +21,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupResizer();
 });
 
+// Helper function to get data URLs based on environment
+function getDataUrl(filename) {
+    if (window.location.hostname.includes('github.io')) {
+        // GitHub Pages - use raw.githubusercontent.com URLs
+        return `https://raw.githubusercontent.com/milosha/byu-2025/main/data/${filename}`;
+    } else {
+        // Local or other hosting - use relative paths
+        return `./data/${filename}`;
+    }
+}
+
 // Load data from JSON files
 async function loadData() {
     try {
         const [resultsResponse, lapsResponse] = await Promise.all([
-            fetch('./data/results.json'),
-            fetch('./data/laps.json')
+            fetch(getDataUrl('results.json')),
+            fetch(getDataUrl('laps.json'))
         ]);
 
         resultsData = await resultsResponse.json();
