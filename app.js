@@ -133,6 +133,15 @@ function setupEventListeners() {
     });
 }
 
+// Helper function to determine if a section is trail or road
+function isTrailSection(sectionNumber) {
+    // Section 3 was road due to rain (exception)
+    if (sectionNumber === 3) return false;
+
+    // Odd sections are normally trail, even are road
+    return sectionNumber % 2 === 1;
+}
+
 // Initialize Chart
 function initChart() {
     const ctx = document.getElementById('lapChart').getContext('2d');
@@ -152,52 +161,65 @@ function initChart() {
             // Get the number of laps
             const maxLap = xScale.max || 0;
 
-            // Draw alternating backgrounds
-            for (let startLap = 1; startLap <= maxLap; startLap += 24) {
-                // Trail Loop (11 hours) - Day
-                const trailStart = xScale.getPixelForValue(startLap - 1);
-                const trailEnd = xScale.getPixelForValue(Math.min(startLap + 10, maxLap));
+            // Draw sections with trail/road logic
+            let currentLap = 1;
+            let sectionNumber = 1;
 
-                ctx.fillStyle = 'rgba(255, 223, 0, 0.1)'; // Light yellow
+            while (currentLap <= maxLap) {
+                // Duration is based on original schedule (odd = 11, even = 13)
+                const sectionLaps = sectionNumber % 2 === 1 ? 11 : 13;
+                const sectionEnd = Math.min(currentLap + sectionLaps - 1, maxLap);
+
+                // Appearance is based on isTrailSection (handles rain exception)
+                const isTrail = isTrailSection(sectionNumber);
+
+                // Draw background
+                const sectionStart = xScale.getPixelForValue(currentLap - 1);
+                const sectionEndPixel = xScale.getPixelForValue(sectionEnd);
+
+                ctx.fillStyle = isTrail ? 'rgba(255, 223, 0, 0.1)' : 'rgba(0, 0, 139, 0.08)';
                 ctx.fillRect(
-                    trailStart,
+                    sectionStart,
                     chartArea.top,
-                    trailEnd - trailStart,
+                    sectionEndPixel - sectionStart,
                     chartArea.bottom - chartArea.top
                 );
 
-                // Road Loop (13 hours) - Night
-                if (startLap + 11 <= maxLap) {
-                    const roadStart = xScale.getPixelForValue(startLap + 10);
-                    const roadEnd = xScale.getPixelForValue(Math.min(startLap + 23, maxLap));
-
-                    ctx.fillStyle = 'rgba(0, 0, 139, 0.08)'; // Dark blue
-                    ctx.fillRect(
-                        roadStart,
-                        chartArea.top,
-                        roadEnd - roadStart,
-                        chartArea.bottom - chartArea.top
-                    );
-                }
+                currentLap += sectionLaps;
+                sectionNumber++;
             }
 
-            // Add labels for Trail and Road sections
+            // Add labels for sections
             ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
             ctx.font = '12px Arial';
             ctx.textAlign = 'center';
 
-            for (let startLap = 1; startLap <= maxLap; startLap += 24) {
-                // Trail label
-                const trailCenter = xScale.getPixelForValue(startLap + 4.5);
-                if (trailCenter && startLap + 4.5 <= maxLap) {
-                    ctx.fillText('Trail', trailCenter, chartArea.top + 15);
+            currentLap = 1;
+            sectionNumber = 1;
+
+            while (currentLap <= maxLap) {
+                // Duration is based on original schedule (odd = 11, even = 13)
+                const sectionLaps = sectionNumber % 2 === 1 ? 11 : 13;
+                const sectionEnd = Math.min(currentLap + sectionLaps - 1, maxLap);
+                const centerLap = currentLap + (sectionLaps - 1) / 2;
+
+                // Appearance is based on isTrailSection (handles rain exception)
+                const isTrail = isTrailSection(sectionNumber);
+
+                if (centerLap <= maxLap) {
+                    const centerPixel = xScale.getPixelForValue(centerLap - 0.5);
+                    let label = isTrail ? 'Trail' : 'Road';
+
+                    // Special label for section 3 (rain exception)
+                    if (sectionNumber === 3) {
+                        label = 'Road (rain)';
+                    }
+
+                    ctx.fillText(label, centerPixel, chartArea.top + 15);
                 }
 
-                // Road label
-                if (startLap + 16.5 <= maxLap) {
-                    const roadCenter = xScale.getPixelForValue(startLap + 16.5);
-                    ctx.fillText('Road', roadCenter, chartArea.top + 15);
-                }
+                currentLap += sectionLaps;
+                sectionNumber++;
             }
 
             ctx.restore();
