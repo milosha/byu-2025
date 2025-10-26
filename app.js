@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 function getDataUrl(filename) {
     if (window.location.hostname.includes('github.io')) {
         // GitHub Pages - use raw.githubusercontent.com URLs
-        return `https://raw.githubusercontent.com/milosha/byu-2025/main/data/${filename}`;
+        return `https://raw.githubusercontent.com/milosha/byu-2025/main/data_2025/${filename}`;
     } else {
         // Local or other hosting - use relative paths
-        return `./data/${filename}`;
+        return `./data_2025/${filename}`;
     }
 }
 
