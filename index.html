@@ -14,8 +14,24 @@
 <body>
     <!-- Header -->
     <div class="container-fluid bg-dark text-white py-3">
-        <h1 class="text-center mb-0">Big’s Backyard Individual World Championship 2025 Data Nerdism</h1>
+        <h1 class="text-center mb-0">Big's Backyard Individual World Championship Data Nerdism</h1>
         <p class="text-center mb-0 mt-2 opacity-75">Select runner(s) to see their stats on the right. When 1-3 runners are selected, standard deviation and trend (linear regression) are displayed.</p>
+    </div>
+
+    <!-- Edition Tabs -->
+    <div class="container-fluid mt-2 mb-0">
+        <ul class="nav nav-tabs mb-0" id="editionTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-2025" data-bs-toggle="tab" data-edition="2025" type="button" role="tab">
+                    2025
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-2023" data-bs-toggle="tab" data-edition="2023" type="button" role="tab">
+                    2023
+                </button>
+            </li>
+        </ul>
     </div>
 
     <!-- Main Content -->
@@ -23,7 +39,7 @@
         <div class="split-container">
             <!-- Left Panel: Data Table -->
             <div id="leftPanel" class="split-panel">
-                <div class="table-responsive" style="max-height: 80vh; overflow-y: auto;">
+                <div class="table-responsive" style="max-height: calc(100vh - 240px); overflow-y: auto;">
                     <table id="resultsTable" class="table table-sm table-hover">
                         <thead class="sticky-top bg-light">
                             <tr>
@@ -44,7 +60,8 @@
                     </table>
                 </div>
                 <div class="mt-2 text-center">
-                    <a href="https://my.raceresult.com/364272/results#0_B3DC1F" target="_blank" rel="noopener noreferrer">Data source</a>
+                    <a href="https://my.raceresult.com/364272/results#0_B3DC1F" target="_blank" rel="noopener noreferrer">Data source 2025</a>
+                    <a href="https://my.raceresult.com/266852/results#0_B3DC1F" target="_blank" rel="noopener noreferrer">Data source 2023</a>
                 </div>
             </div>
 
