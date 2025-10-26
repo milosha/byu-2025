@@ -11,6 +11,33 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Edition Tabs */
+#editionTabs {
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 0;
+}
+
+#editionTabs .nav-link {
+    font-weight: 500;
+    color: #495057;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+}
+
+#editionTabs .nav-link:hover {
+    color: #2a5298;
+    border-bottom-color: #adb5bd;
+}
+
+#editionTabs .nav-link.active {
+    color: #2a5298;
+    background-color: transparent;
+    border-bottom-color: #2a5298;
+    font-weight: 600;
+}
+
 /* Table styling */
 #resultsTable {
     font-size: 0.85rem;
@@ -60,7 +87,7 @@ body {
 /* Chart container */
 .chart-container {
     position: relative;
-    height: 70vh;
+    height: 65vh;
     width: 100%;
     background-color: white;
     padding: 20px;
@@ -128,7 +155,7 @@ body {
 /* Split panel layout */
 .split-container {
     display: flex;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 180px);
     position: relative;
 }
 

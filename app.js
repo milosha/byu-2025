@@ -5,6 +5,7 @@ let selectedRunners = new Set();
 let chart = null;
 let sortColumn = null;
 let sortDirection = 'asc';
+let currentEdition = '2025'; // Default edition
 
 // Color palette for multiple runners
 const colorPalette = [
@@ -17,18 +18,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadData();
     renderTable();
     setupEventListeners();
+    setupEditionTabs();
     initChart();
     setupResizer();
 });
 
-// Helper function to get data URLs based on environment
+// Helper function to get data URLs based on environment and edition
 function getDataUrl(filename) {
+    const dataFolder = `data_${currentEdition}`;
     if (window.location.hostname.includes('github.io')) {
         // GitHub Pages - use raw.githubusercontent.com URLs
-        return `https://raw.githubusercontent.com/milosha/byu-2025/main/data_2025/${filename}`;
+        return `https://raw.githubusercontent.com/milosha/byu-2025/main/${dataFolder}/${filename}`;
     } else {
         // Local or other hosting - use relative paths
-        return `./data_2025/${filename}`;
+        return `./${dataFolder}/${filename}`;
     }
 }
 
@@ -43,11 +46,38 @@ async function loadData() {
         resultsData = await resultsResponse.json();
         lapsData = await lapsResponse.json();
 
-        console.log('Results loaded:', resultsData.length);
-        console.log('Laps loaded:', lapsData.length);
+        console.log(`${currentEdition} Results loaded:`, resultsData.length);
+        console.log(`${currentEdition} Laps loaded:`, lapsData.length);
     } catch (error) {
         console.error('Error loading data:', error);
     }
+}
+
+// Setup edition tab switching
+function setupEditionTabs() {
+    const tabButtons = document.querySelectorAll('#editionTabs button[data-edition]');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const edition = button.getAttribute('data-edition');
+            if (edition !== currentEdition) {
+                currentEdition = edition;
+
+                // Clear selections
+                selectedRunners.clear();
+                sortColumn = null;
+                sortDirection = 'asc';
+
+                // Reload data
+                await loadData();
+                renderTable();
+                updateChart();
+                updateSelectedRunnersBadges();
+
+                console.log(`Switched to ${edition} edition`);
+            }
+        });
+    });
 }
 
 // Render table
@@ -136,7 +166,7 @@ function setupEventListeners() {
 // Helper function to determine if a section is trail or road
 function isTrailSection(sectionNumber) {
     // Section 3 was road due to rain (exception)
-    if (sectionNumber === 3) return false;
+    if (sectionNumber === 3 && currentEdition === '2025') return false;
 
     // Odd sections are normally trail, even are road
     return sectionNumber % 2 === 1;
@@ -210,7 +240,7 @@ function initChart() {
                     let label = isTrail ? 'Trail' : 'Road';
 
                     // Special label for section 3 (rain exception)
-                    if (sectionNumber === 3) {
+                    if (sectionNumber === 3 && currentEdition === '2025') {
                         label = 'Road (rain)';
                     }
 
