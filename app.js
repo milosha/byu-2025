@@ -280,7 +280,38 @@ function initChart() {
                 },
                 legend: {
                     display: true,
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        filter: function(legendItem, chartData) {
+                            // Hide "Upper Std Dev" from legend
+                            return !legendItem.text.includes('Upper Std Dev');
+                        }
+                    },
+                    onClick: function(e, legendItem, legend) {
+                        const chart = legend.chart;
+                        const clickedLabel = legendItem.text;
+
+                        // If clicking on Standard Deviation, toggle both upper and lower bands
+                        if (clickedLabel.includes('Standard Deviation')) {
+                            const runnerName = clickedLabel.replace(' Standard Deviation', '');
+
+                            // Find both std dev datasets for this runner
+                            chart.data.datasets.forEach((dataset, i) => {
+                                if (dataset.label === `${runnerName} Upper Std Dev` ||
+                                    dataset.label === `${runnerName} Standard Deviation`) {
+                                    const meta = chart.getDatasetMeta(i);
+                                    meta.hidden = !meta.hidden;
+                                }
+                            });
+                        } else {
+                            // Default behavior for other legend items
+                            const index = legendItem.datasetIndex;
+                            const meta = chart.getDatasetMeta(index);
+                            meta.hidden = !meta.hidden;
+                        }
+
+                        chart.update();
+                    }
                 },
                 tooltip: {
                     mode: 'index',
@@ -510,7 +541,7 @@ function updateChart() {
 
             // Lower band (mean - std dev)
             datasets.push({
-                label: `${runner.Name} Lower Std Dev`,
+                label: `${runner.Name} Standard Deviation`,
                 data: lapTimes.map(t => t !== null ? Math.max(stats.mean - stats.stdDev, 30) : null),
                 borderColor: color + '40',
                 backgroundColor: color + '20',
