@@ -200,7 +200,6 @@ function initChart() {
             while (currentLap <= maxLap) {
                 // Duration is based on original schedule (odd = 11, even = 13)
                 const sectionLaps = sectionNumber % 2 === 1 ? 11 : 13;
-                const sectionEnd = Math.min(currentLap + sectionLaps - 1, maxLap);
                 const centerLap = currentLap + (sectionLaps - 1) / 2;
 
                 // Appearance is based on isTrailSection (handles rain exception)
@@ -325,6 +324,45 @@ function calculateTrendline(lapTimes) {
     return { slope, intercept };
 }
 
+// Calculate Exponential Moving Average (EMA) with 6-lap window
+function calculateEMA(lapTimes, windowSize = 6) {
+    if (lapTimes.length < 2) return null;
+
+    const emaData = [];
+    const alpha = 2 / (windowSize + 1); // Smoothing factor
+
+    for (let i = 0; i < lapTimes.length; i++) {
+        if (lapTimes[i] === null) {
+            emaData.push(null);
+            continue;
+        }
+
+        if (i === 0) {
+            // First value uses the actual lap time
+            emaData.push(lapTimes[i]);
+        } else {
+            // Collect valid previous laps within the window
+            const validPreviousLaps = [];
+            for (let j = Math.max(0, i - windowSize); j < i; j++) {
+                if (lapTimes[j] !== null) {
+                    validPreviousLaps.push(lapTimes[j]);
+                }
+            }
+
+            if (validPreviousLaps.length === 0) {
+                emaData.push(lapTimes[i]);
+            } else {
+                // Calculate EMA: EMA = α × Current + (1 - α) × Previous EMA
+                const previousEMA = emaData[i - 1] !== null ? emaData[i - 1] : lapTimes[i];
+                const currentEMA = alpha * lapTimes[i] + (1 - alpha) * previousEMA;
+                emaData.push(currentEMA);
+            }
+        }
+    }
+
+    return emaData;
+}
+
 // Update chart with selected runners
 function updateChart() {
     if (!chart) return;
@@ -398,6 +436,22 @@ function updateChart() {
                     fill: false
                 });
             }
+
+            // Add EMA trend line (6-lap rolling weighted average)
+            const emaData = calculateEMA(lapTimes, 6);
+            if (emaData) {
+                datasets.push({
+                    label: `${runner.Name} EMA (6-lap)`,
+                    data: emaData.map(val => val !== null ? Math.max(30, Math.min(60, val)) : null),
+                    borderColor: color + 'AA',
+                    backgroundColor: 'transparent',
+                    borderDash: [5, 5],
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    fill: false,
+                    hidden: true
+                });
+            }
         }
 
         // Add standard deviation bands for up to two runners
@@ -412,7 +466,8 @@ function updateChart() {
                 backgroundColor: 'transparent',
                 borderDash: [5, 5],
                 pointRadius: 0,
-                fill: false
+                fill: false,
+                hidden: true
             });
 
             // Lower band (mean - std dev)
@@ -423,7 +478,8 @@ function updateChart() {
                 backgroundColor: color + '20',
                 borderDash: [5, 5],
                 pointRadius: 0,
-                fill: '-1'
+                fill: '-1',
+                hidden: true
             });
 
         }
