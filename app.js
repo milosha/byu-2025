@@ -271,7 +271,7 @@ function initChart() {
                 },
                 subtitle: {
                     display: true,
-                    text: 'Click to (de)select data:',
+                    text: 'Click legend to (de)select data:',
                     position: 'top',
                     align: 'start',
                     padding: {
