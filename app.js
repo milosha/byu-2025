@@ -197,7 +197,7 @@ function initChart() {
 
             while (currentLap <= maxLap) {
                 // Duration is based on original schedule (odd = 11, even = 13)
-                const sectionLaps = sectionNumber % 2 === 1 ? 11 : 13;
+                const sectionLaps = sectionNumber === 1 ? 10 : (sectionNumber % 2 === 1 ? 11 : 13);
                 const sectionEnd = Math.min(currentLap + sectionLaps - 1, maxLap);
 
                 // Appearance is based on isTrailSection (handles rain exception)
@@ -229,7 +229,7 @@ function initChart() {
 
             while (currentLap <= maxLap) {
                 // Duration is based on original schedule (odd = 11, even = 13)
-                const sectionLaps = sectionNumber % 2 === 1 ? 11 : 13;
+                const sectionLaps = sectionNumber === 1 ? 10 : (sectionNumber % 2 === 1 ? 11 : 13);
                 const centerLap = currentLap + (sectionLaps - 1) / 2;
 
                 // Appearance is based on isTrailSection (handles rain exception)
