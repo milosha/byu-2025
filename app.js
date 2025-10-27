@@ -267,8 +267,16 @@ function initChart() {
             maintainAspectRatio: false,
             plugins: {
                 title: {
+                    display: false
+                },
+                subtitle: {
                     display: true,
-                    text: 'Lap Split Times (Trail: 11 hours, Road: 13 hours)'
+                    text: 'Click to (de)select data:',
+                    position: 'top',
+                    align: 'start',
+                    padding: {
+                        bottom: 10
+                    }
                 },
                 legend: {
                     display: true,
@@ -283,7 +291,7 @@ function initChart() {
                 x: {
                     title: {
                         display: true,
-                        text: 'Lap Number'
+                        text: 'Lap Split Times (Trail: 11 hours, Road: 13 hours)'
                     }
                 },
                 y: {
