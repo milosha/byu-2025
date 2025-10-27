@@ -197,3 +197,38 @@ body {
     font-size: 20px;
     line-height: 1;
 }
+
+/* Small Screen Warning Overlay */
+.small-screen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.small-screen-modal {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.small-screen-modal p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.small-screen-modal button {
+    min-width: 100px;
+}

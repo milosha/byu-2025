@@ -15,6 +15,7 @@ const colorPalette = [
 
 // Load data on page load
 document.addEventListener('DOMContentLoaded', async () => {
+    checkScreenSize();
     await loadData();
     renderTable();
     setupEventListeners();
@@ -628,6 +629,31 @@ function setupResizer() {
             isResizing = false;
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
+        }
+    });
+}
+
+// Check screen size and show overlay for small screens
+function checkScreenSize() {
+    const overlay = document.getElementById('smallScreenOverlay');
+    const dismissButton = document.getElementById('dismissOverlay');
+
+    // Check if screen width is less than 700px
+    if (window.innerWidth < 700) {
+        overlay.style.display = 'flex';
+    }
+
+    // Dismiss overlay when OK button is clicked
+    dismissButton.addEventListener('click', () => {
+        overlay.style.display = 'none';
+    });
+
+    // Optional: Re-check on window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth < 700) {
+            overlay.style.display = 'flex';
+        } else {
+            overlay.style.display = 'none';
         }
     });
 }
